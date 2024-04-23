@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   client.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ymunoz-m <ymunoz-m@student.42.fr>          +#+  +:+       +#+        */
+/*   By: anfi <anfi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 19:32:17 by ymunoz-m          #+#    #+#             */
-/*   Updated: 2024/04/22 20:41:24 by ymunoz-m         ###   ########.fr       */
+/*   Updated: 2024/04/23 22:19:04 by anfi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ void	send_char(int pid, char c)
 			ft_printf(".\n\n", j);
 		else if (j % 8000 == 0 && j != 0)
 			ft_printf("..\n\n", j);
-		usleep(200);
+		usleep(100);
 	}
 }
 

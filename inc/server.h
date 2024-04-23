@@ -6,7 +6,7 @@
 /*   By: anfi <anfi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 20:43:03 by ymunoz-m          #+#    #+#             */
-/*   Updated: 2024/04/23 20:06:36 by anfi             ###   ########.fr       */
+/*   Updated: 2024/04/23 23:45:45 by anfi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,13 @@
 //#include <stdio.h>
 
 # include "../libft/libft.h"
+
+typedef enum t_boolean
+{
+	length = 0,
+	message = 1
+}		t_bool;
+
 
 void	print_pid(void);
 void	ft_free(char **str);

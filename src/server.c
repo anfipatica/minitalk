@@ -6,7 +6,7 @@
 /*   By: anfi <anfi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 19:32:24 by ymunoz-m          #+#    #+#             */
-/*   Updated: 2024/04/23 20:12:02 by anfi             ###   ########.fr       */
+/*   Updated: 2024/04/23 22:18:48 by anfi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,6 @@ int	main(void)
 	sigemptyset(&mask);
 	sa.sa_handler = handle_signal;
 	sa.sa_flags = 0;
-	//sa.sa_mask = 0;
 	sa.sa_mask = mask;
 	sigaction(SIGUSR1, &sa, NULL);
 	sigaction(SIGUSR2, &sa, NULL);
