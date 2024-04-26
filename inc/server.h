@@ -6,7 +6,7 @@
 /*   By: ymunoz-m <ymunoz-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 20:43:03 by ymunoz-m          #+#    #+#             */
-/*   Updated: 2024/04/26 14:38:08 by ymunoz-m         ###   ########.fr       */
+/*   Updated: 2024/04/26 16:51:44 by ymunoz-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,13 +29,13 @@
 //#include <stdio.h>
 
 # include "../libft/libft.h"
+# include "../ft_printf/ft_printf.h"
 
 typedef enum t_boolean
 {
 	length = 0,
 	message = 1
 }		t_bool;
-
 
 void	print_pid(void);
 void	ft_free(char **str);

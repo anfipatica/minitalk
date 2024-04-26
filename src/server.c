@@ -6,30 +6,28 @@
 /*   By: ymunoz-m <ymunoz-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 19:32:24 by ymunoz-m          #+#    #+#             */
-/*   Updated: 2024/04/24 21:50:22 by ymunoz-m         ###   ########.fr       */
+/*   Updated: 2024/04/26 16:49:11 by ymunoz-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/server.h"
-#include <time.h>
 
-t_bool	state = length;
+t_bool	g_state = length;
 
 void	print_pid(void)
 {
 	pid_t	pid;
 
 	pid = getpid();
-
 	ft_printf("￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣\n"
-				"\n	|￣￣￣￣￣￣￣￣￣|\n"
-				"	|       PID:       |\n"
-				"	|      %d       |\n"
-				"	|＿＿＿＿＿＿＿＿＿|\n"
-				"	(\\__/) ||\n"
-				"	(•ㅅ•) ||\n"
-				"	/ 　 づ||\n\n"
-				"￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣\n\n", pid);
+		"\n	|￣￣￣￣￣￣￣￣￣|\n"
+		"	|       PID:       |\n"
+		"	|      %d       |\n"
+		"	|＿＿＿＿＿＿＿＿＿|\n"
+		"	(\\__/) ||\n"
+		"	(•ㅅ•) ||\n"
+		"	/ 　 づ||\n\n"
+		"￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣\n", pid);
 }
 
 char	decode_char(int signal)
@@ -50,7 +48,7 @@ char	decode_char(int signal)
 	{
 		if (c == '\0')
 		{
-			state = !state;
+			g_state = !g_state;
 			return ('\0');
 		}
 		else
@@ -70,10 +68,9 @@ void	decode_str(int signal, char	*str_length_char, int *i)
 		*i = 0;
 	}
 	str[*i] = decode_char(signal);
-	//printf("i = %d, state = %d. str[i] = \"%c\"\n", *i, state, str[*i]);
-	if (state == length)
+	if (g_state == length)
 	{
-		printf("%s\n", str);
+		ft_printf("%s\n ", str);
 		free(str);
 		str = NULL;
 		*i = 0;
@@ -81,20 +78,19 @@ void	decode_str(int signal, char	*str_length_char, int *i)
 	else if (str[*i] != '\0')
 		(*i)++;
 }
+
 void	handle_signal(int signal)
 {
 	static char	str_length_char[7];
 	static int	i;
-	//printf("i = %d\n", i);
-	//printf("-->state = %u\n", state);
+
 	if (!i)
 	{
 		i = 0;
 	}
-	if (state == length)
+	if (g_state == length)
 	{
 		str_length_char[i] = decode_char(signal);
-		//printf("c = %c\n", str_length_char[i]);
 		if (str_length_char[i] != '\0')
 			i++;
 	}
@@ -108,6 +104,7 @@ int	main(void)
 {
 	struct sigaction	sa;
 	sigset_t			mask;
+
 	print_pid();
 	sigemptyset(&mask);
 	sa.sa_handler = handle_signal;

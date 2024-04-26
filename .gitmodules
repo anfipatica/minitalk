@@ -1,0 +1,6 @@
+[submodule "ft_printf"]
+	path = ft_printf
+	url = git@github.com:anfipatica/prinft.git
+[submodule "libft"]
+	path = libft
+	url = git@github.com:anfipatica/libft.git

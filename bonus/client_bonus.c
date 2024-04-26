@@ -6,21 +6,22 @@
 /*   By: ymunoz-m <ymunoz-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 19:32:17 by ymunoz-m          #+#    #+#             */
-/*   Updated: 2024/04/26 15:26:23 by ymunoz-m         ###   ########.fr       */
+/*   Updated: 2024/04/26 16:54:48 by ymunoz-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/client.h"
-int	j = 0;
+
+int	g_j = 0;
 
 void	check_received(int signal)
 {
 	(void)signal;
-	j++;
-	if (j % 16000 == 0 && j != 0)
-		ft_printf(".\n\n", j);
-	else if (j % 8000 == 0 && j != 0)
-		ft_printf("..\n\n", j);
+	g_j++;
+	if (g_j % 16000 == 0 && g_j != 0)
+		ft_printf(".\n", g_j);
+	else if (g_j % 8000 == 0 && g_j != 0)
+		ft_printf("..\n", g_j);
 }
 
 void	send_char(int pid, char c)
@@ -33,12 +34,12 @@ void	send_char(int pid, char c)
 		if (c & (1 << i))
 		{
 			if (kill(pid, SIGUSR1) == -1)
-				exit(write(1, "ERROR: Incorrect PID. Try again\n", 32));
+				exit(ft_printf("ERROR: Either wrong PID or server failed.\n"));
 		}
 		else
 		{
 			if (kill(pid, SIGUSR2) == -1)
-				exit(write(1, "ERROR: Incorrect PID. Try again\n", 32));
+				exit(ft_printf("ERROR: Either wrong PID or server failed.\n"));
 		}
 		pause();
 		usleep(20);
@@ -61,9 +62,9 @@ void	send_str_length(pid_t server_pid, char *str)
 
 int	main(int argc, char **argv)
 {
-	pid_t	pid;
-	int		i;
-	struct sigaction sa;
+	pid_t				pid;
+	int					i;
+	struct sigaction	sa;
 
 	if (argc != 3)
 		return (1);
@@ -79,10 +80,11 @@ int	main(int argc, char **argv)
 		send_char(pid, argv[2][i]);
 	send_char(pid, argv[2][i]);
 	ft_printf("--------------------------------------------\n"
-	"->str chars sent: %d.\n"
-	"->total chars sent (str + str_length): %d\n"
-	"->chars correctly sent: %d\n"
-	"->total confirmations received from server: %d\n"
-	"--------------------------------------------\n", i + 1, ((j / 8) - i) + i, (j / 8), j);
+		"->str chars sent: %d.\n"
+		"->total chars sent (str + str_length): %d\n"
+		"->chars correctly sent: %d\n"
+		"->total confirmations received from server: %d\n"
+		"--------------------------------------------\n",
+		i + 1, ((g_j / 8) - i) + i, (g_j / 8), g_j);
 	return (0);
 }
