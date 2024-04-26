@@ -1,5 +1,5 @@
-SERVER = server
-CLIENT = client
+SERVER = $(BIN_DIR)server
+CLIENT = $(BIN_DIR)client
 BONUS_SERVER = server_bonus
 BONUS_CLIENT = client_bonus
 
@@ -17,42 +17,35 @@ CFLAGS = -Wall -Werror -Wextra -fsanitize=address -g3
 
 RM = rm -rf
 
-
 .PHONY: all clean fclean re
 
 all: $(SERVER) $(CLIENT)
 
-
-$(SERVER): objs $(OBJS_DIR)server.o
+$(SERVER):$(OBJS_DIR)server.o
 	mkdir -p $(BIN_DIR)
-	$(CC) $(CFLAGS) $(LIBFT) $(PRINTF) $(OBJS_DIR)server.o -o $(BIN_DIR)$(SERVER)
+	make -C ft_printf
+	make -C libft
+	$(CC) $(CFLAGS) $(LIBFT) $(PRINTF) $(OBJS_DIR)server.o -o $(SERVER)
 
 $(CLIENT): $(OBJS_DIR)client.o
-	$(CC) $(CFLAGS) $(LIBFT) $(PRINTF) $(OBJS_DIR)client.o -o $(BIN_DIR)$(CLIENT)
-
-objs:
-	mkdir -p $(OBJS_DIR)
-	make re -C ft_printf
-	make re -C libft
+	$(CC) $(CFLAGS) $(LIBFT) $(PRINTF) $(OBJS_DIR)client.o -o $(CLIENT)
 
 $(OBJS_DIR)%.o: $(SRC_DIR)%.c
+	mkdir -p $(OBJS_DIR)
 	$(CC) -c $(CFLAGS) $< -o $@
 
-bonus: server_bonus client_bonus
+bonus: $(BIN_DIR)server_bonus $(BIN_DIR)client_bonus
 
-server_bonus: objs_bonus $(OBJS_BONUS_DIR)server_bonus.o
+$(BIN_DIR)server_bonus: $(OBJS_BONUS_DIR)server_bonus.o
+	make -C libft
+	make -C ft_printf
 	$(CC) $(CFLAGS) $(OBJS_BONUS_DIR)server_bonus.o $(LIBFT) $(PRINTF) -o $(BIN_DIR)server_bonus
 
-client_bonus: $(OBJS_BONUS_DIR)client_bonus.o
+$(BIN_DIR)client_bonus: $(OBJS_BONUS_DIR)client_bonus.o
 	$(CC) $(CFLAGS) $(OBJS_BONUS_DIR)client_bonus.o $(LIBFT) $(PRINTF) -o $(BIN_DIR)client_bonus
 
-objs_bonus:
-	mkdir -p $(OBJS_BONUS_DIR)
-	mkdir -p $(BONUS_DIR)
-	make re -C libft
-	make re -C ft_printf
-
 $(OBJS_BONUS_DIR)%.o: $(BONUS_DIR)%.c
+	mkdir -p $(OBJS_BONUS_DIR)
 	$(CC) -c $(CFLAGS) $< -o $@
 
 clean:
@@ -62,3 +55,4 @@ fclean: clean
 	$(RM) $(BIN_DIR)
 
 re: fclean all
+

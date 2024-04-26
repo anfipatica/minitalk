@@ -18,10 +18,10 @@ OBJS = $(SRCS:%.c=obj/%.o)
 all: $(NAME)
 
 $(NAME): objs $(OBJS)
-	ar rcs $(NAME) $(OBJS)
+	@ar rcs $(NAME) $(OBJS)
 
 objs:
-	mkdir -p $(OBJS_DIR)
+	@mkdir -p $(OBJS_DIR)
 
 $(OBJS_DIR)/%.o: %.c
 	$(CC) -c $< -o $@
