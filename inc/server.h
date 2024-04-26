@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   server.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anfi <anfi@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: ymunoz-m <ymunoz-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 20:43:03 by ymunoz-m          #+#    #+#             */
-/*   Updated: 2024/04/23 23:45:45 by anfi             ###   ########.fr       */
+/*   Updated: 2024/04/26 14:38:08 by ymunoz-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 # define SERVER_H
 
 //Definitions needed to properly work in linux. Commented for mac.
-#define _POSIX_C_SOURCE 199309L
-#define _DEFAULT_SOURCE
+//#define _POSIX_C_SOURCE 199309L
+//#define _DEFAULT_SOURCE
 
 //Libraries needed to work with signals
 # include <signal.h>
@@ -41,5 +41,6 @@ void	print_pid(void);
 void	ft_free(char **str);
 char	*ft_realloc(char *c, char *str);
 void	handle_signal(int signal);
+void	handle_signal_bonus(int signal, siginfo_t *info, void *ucontext);
 
 #endif

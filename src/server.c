@@ -3,14 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   server.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anfi <anfi@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: ymunoz-m <ymunoz-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 19:32:24 by ymunoz-m          #+#    #+#             */
-/*   Updated: 2024/04/23 22:18:48 by anfi             ###   ########.fr       */
+/*   Updated: 2024/04/24 21:50:22 by ymunoz-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/server.h"
+#include <time.h>
+
+t_bool	state = length;
 
 void	print_pid(void)
 {
@@ -29,60 +32,75 @@ void	print_pid(void)
 				"￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣\n\n", pid);
 }
 
-void	ft_free(char **str)
-{
-	free(*str);
-	*str = NULL;
-}
-
-char	*ft_realloc(char *c, char *str)
-{
-	char		*temp;
-	temp = NULL;
-	
-	if (!str)
-	{
-		str = ft_calloc(2, sizeof(char));
-		if (!str)
-			exit(1);
-		str[0] = c[0];
-	}
-	else
-	{
-		temp = ft_strdup(str);
-		ft_free(&str);
-		str = ft_strjoin(temp, c);
-		ft_free(&temp);
-	}
-	return (str);
-}
-
-void	handle_signal(int signal)
+char	decode_char(int signal)
 {
 	static int	byte;
-	static char	c[2];
-	static char	*str;
+	static char	c;
 
 	if (byte == 0 || byte == 0b10000000)
 	{
 		byte = 0b00000001;
-		c[0] = 0b00000000;
-		c[1] = '\0';
+		c = 0b00000000;
 	}
 	else
 		byte <<= 1;
 	if (signal == SIGUSR1)
-		c[0] |= byte;
+		c |= byte;
 	if (byte == 0b10000000)
 	{
-		if (c[0] == '\0')
+		if (c == '\0')
 		{
-			write(1, str, ft_strlen(str));
-			write(1, "\n", 1);
-			ft_free(&str);
+			state = !state;
+			return ('\0');
 		}
 		else
-			str = ft_realloc(c, str);
+			return (c);
+	}
+	return ('\0');
+}
+
+void	decode_str(int signal, char	*str_length_char, int *i)
+{
+	static char	*str;
+
+	if (!str)
+	{
+		str = ft_calloc(ft_atoi(str_length_char) + 1, sizeof(char));
+		ft_bzero(str_length_char, 7);
+		*i = 0;
+	}
+	str[*i] = decode_char(signal);
+	//printf("i = %d, state = %d. str[i] = \"%c\"\n", *i, state, str[*i]);
+	if (state == length)
+	{
+		printf("%s\n", str);
+		free(str);
+		str = NULL;
+		*i = 0;
+	}
+	else if (str[*i] != '\0')
+		(*i)++;
+}
+void	handle_signal(int signal)
+{
+	static char	str_length_char[7];
+	static int	i;
+	//printf("i = %d\n", i);
+	//printf("-->state = %u\n", state);
+	if (!i)
+	{
+		i = 0;
+	}
+	if (state == length)
+	{
+		str_length_char[i] = decode_char(signal);
+		//printf("c = %c\n", str_length_char[i]);
+		if (str_length_char[i] != '\0')
+			i++;
+	}
+	else
+	{
+		decode_str(signal, str_length_char, &i);
 	}
 }
 
