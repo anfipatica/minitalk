@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   server.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ymunoz-m <ymunoz-m@student.42.fr>          +#+  +:+       +#+        */
+/*   By: anfi <anfi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 20:43:03 by ymunoz-m          #+#    #+#             */
-/*   Updated: 2024/04/26 16:51:44 by ymunoz-m         ###   ########.fr       */
+/*   Updated: 2024/04/27 13:13:04 by anfi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 # define SERVER_H
 
 //Definitions needed to properly work in linux. Commented for mac.
-//#define _POSIX_C_SOURCE 199309L
-//#define _DEFAULT_SOURCE
+#define _POSIX_C_SOURCE 199309L
+#define _DEFAULT_SOURCE
 
 //Libraries needed to work with signals
 # include <signal.h>
@@ -23,10 +23,6 @@
 
 //write
 # include <unistd.h>
-
-//Not sure if needed:
-//#include <stdlib.h>
-//#include <stdio.h>
 
 # include "../libft/libft.h"
 # include "../ft_printf/ft_printf.h"

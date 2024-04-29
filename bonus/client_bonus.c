@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   client_bonus.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ymunoz-m <ymunoz-m@student.42.fr>          +#+  +:+       +#+        */
+/*   By: anfi <anfi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 19:32:17 by ymunoz-m          #+#    #+#             */
-/*   Updated: 2024/04/26 16:54:48 by ymunoz-m         ###   ########.fr       */
+/*   Updated: 2024/04/29 19:41:57 by anfi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ void	send_char(int pid, char c)
 				exit(ft_printf("ERROR: Either wrong PID or server failed.\n"));
 		}
 		pause();
-		usleep(20);
+		usleep(100);
 	}
 }
 
@@ -58,6 +58,8 @@ void	send_str_length(pid_t server_pid, char *str)
 		send_char(server_pid, str_length[i]);
 	}
 	send_char(server_pid, str_length[i]);
+	free(str_length);
+	str_length = NULL;
 }
 
 int	main(int argc, char **argv)
@@ -68,7 +70,7 @@ int	main(int argc, char **argv)
 
 	if (argc != 3)
 		return (1);
-	sa.__sigaction_u.__sa_handler = check_received;
+	sa.sa_handler = check_received;
 	sa.sa_flags = 0;
 	sa.sa_flags = 0;
 	sigaction(SIGUSR1, &sa, 0);

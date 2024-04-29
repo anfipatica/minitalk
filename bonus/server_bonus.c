@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   server_bonus.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ymunoz-m <ymunoz-m@student.42.fr>          +#+  +:+       +#+        */
+/*   By: anfi <anfi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 19:32:24 by ymunoz-m          #+#    #+#             */
-/*   Updated: 2024/04/26 16:56:25 by ymunoz-m         ###   ########.fr       */
+/*   Updated: 2024/04/29 19:38:25 by anfi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/server.h"
 #include <time.h>
 
-t_bool	g_state = length;
+pid_t	client_pid;
 
 void	print_pid(void)
 {
@@ -31,7 +31,7 @@ void	print_pid(void)
 		"￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣\n\n", pid);
 }
 
-char	decode_char(int signal)
+char	decode_char(int signal, t_bool *state)
 {
 	static int	byte;
 	static char	c;
@@ -49,7 +49,7 @@ char	decode_char(int signal)
 	{
 		if (c == '\0')
 		{
-			g_state = !g_state;
+			*state = !(*state);
 			return ('\0');
 		}
 		else
@@ -58,7 +58,7 @@ char	decode_char(int signal)
 	return ('\0');
 }
 
-void	decode_str(int signal, char	*str_length_char, int *i)
+void	decode_str(int signal, char	*str_length_char, int *i, t_bool *state)
 {
 	static char	*str;
 
@@ -68,8 +68,8 @@ void	decode_str(int signal, char	*str_length_char, int *i)
 		ft_bzero(str_length_char, 7);
 		*i = 0;
 	}
-	str[*i] = decode_char(signal);
-	if (g_state == length)
+	str[*i] = decode_char(signal, state);
+	if (*state == length)
 	{
 		ft_printf("%s\n", str);
 		free(str);
@@ -84,24 +84,25 @@ void	handle_signal_bonus(int signal, siginfo_t *info, void *ucontext)
 {
 	static char	str_length_char[7];
 	static int	i;
+	t_bool	state;
 
 	(void)ucontext;
 	if (!i)
 	{
+		client_pid = info->si_pid;
 		i = 0;
+		state = length;
 	}
-	if (g_state == length)
+	if (state == length)
 	{
-		str_length_char[i] = decode_char(signal);
+		str_length_char[i] = decode_char(signal, &state);
 		if (str_length_char[i] != '\0')
 			i++;
 	}
 	else
 	{
-		decode_str(signal, str_length_char, &i);
+		decode_str(signal, str_length_char, &i, &state);
 	}
-	usleep(50);
-	kill(info->si_pid, signal);
 }
 
 int	main(void)
@@ -111,12 +112,15 @@ int	main(void)
 
 	print_pid();
 	sigemptyset(&mask);
-	sa.__sigaction_u.__sa_sigaction = handle_signal_bonus;
+	sa.sa_sigaction = handle_signal_bonus;
 	sa.sa_flags = SA_SIGINFO;
 	sa.sa_mask = mask;
 	sigaction(SIGUSR1, &sa, NULL);
 	sigaction(SIGUSR2, &sa, NULL);
 	while (1)
-		;
+	{
+		pause();
+		kill(client_pid, SIGUSR1);
+	}
 	return (0);
 }

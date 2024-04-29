@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   client.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ymunoz-m <ymunoz-m@student.42.fr>          +#+  +:+       +#+        */
+/*   By: anfi <anfi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 19:32:17 by ymunoz-m          #+#    #+#             */
-/*   Updated: 2024/04/26 16:48:29 by ymunoz-m         ###   ########.fr       */
+/*   Updated: 2024/04/29 19:32:42 by anfi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,8 @@ void	send_str_length(pid_t server_pid, char *str)
 		send_char(server_pid, str_length[i]);
 	}
 	send_char(server_pid, str_length[i]);
+	free(str_length);
+	str_length = NULL;
 }
 
 int	main(int argc, char **argv)

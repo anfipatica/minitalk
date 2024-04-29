@@ -3,7 +3,7 @@ CLIENT = $(BIN_DIR)client
 BONUS_SERVER = server_bonus
 BONUS_CLIENT = client_bonus
 
-
+INC_DIR = ./inc
 OBJS_DIR = ./obj/
 OBJS_BONUS_DIR = ./obj/bonus/
 BIN_DIR = ./bin/
@@ -13,7 +13,7 @@ LIBFT = ./libft/libft.a
 PRINTF = ./ft_printf/ft_printf.a
 
 CC = gcc
-CFLAGS = -Wall -Werror -Wextra -fsanitize=address -g3
+CFLAGS = -Wall -Werror -Wextra -fsanitize=address -g3 -I$(INC_DIR)
 
 RM = rm -rf
 
@@ -23,12 +23,12 @@ all: $(SERVER) $(CLIENT)
 
 $(SERVER):$(OBJS_DIR)server.o
 	mkdir -p $(BIN_DIR)
-	make -C ft_printf
 	make -C libft
-	$(CC) $(CFLAGS) $(LIBFT) $(PRINTF) $(OBJS_DIR)server.o -o $(SERVER)
+	make -C ft_printf
+	$(CC) $(CFLAGS) $(OBJS_DIR)server.o $(LIBFT) $(PRINTF) -o $(SERVER)
 
 $(CLIENT): $(OBJS_DIR)client.o
-	$(CC) $(CFLAGS) $(LIBFT) $(PRINTF) $(OBJS_DIR)client.o -o $(CLIENT)
+	$(CC) $(CFLAGS) $(OBJS_DIR)client.o $(LIBFT) $(PRINTF) -o $(CLIENT)
 
 $(OBJS_DIR)%.o: $(SRC_DIR)%.c
 	mkdir -p $(OBJS_DIR)

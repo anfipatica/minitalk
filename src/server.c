@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   server.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ymunoz-m <ymunoz-m@student.42.fr>          +#+  +:+       +#+        */
+/*   By: anfi <anfi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 19:32:24 by ymunoz-m          #+#    #+#             */
-/*   Updated: 2024/04/26 16:49:11 by ymunoz-m         ###   ########.fr       */
+/*   Updated: 2024/04/27 13:17:54 by anfi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ void	decode_str(int signal, char	*str_length_char, int *i)
 	str[*i] = decode_char(signal);
 	if (g_state == length)
 	{
-		ft_printf("%s\n ", str);
+		ft_printf("%s\n", str);
 		free(str);
 		str = NULL;
 		*i = 0;
@@ -113,6 +113,6 @@ int	main(void)
 	sigaction(SIGUSR1, &sa, NULL);
 	sigaction(SIGUSR2, &sa, NULL);
 	while (1)
-		;
+		pause();
 	return (0);
 }
