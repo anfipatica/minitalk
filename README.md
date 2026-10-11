@@ -6,6 +6,8 @@ only UNIX signals (`SIGUSR1` and `SIGUSR2`). Built at
 
 ## How it works
 
+![How it works](minitalk_protocol.png)
+
 - The **server** prints its PID and waits for signals.
 - The **client** receives the server's PID and a message, and sends it
   **bit by bit**, least significant bit first: `SIGUSR1` is a `1` and
